@@ -1,5 +1,11 @@
 .App {
   text-align: center;
+  border: 5px tomato solid;
+}
+
+.LoginFlex {
+  display: flex;
+  justify-content: center;
 }
 
 .App-logo {

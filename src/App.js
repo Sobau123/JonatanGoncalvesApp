@@ -1,22 +1,41 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { auth } from './firebase/firebase';
+import 'bootstrap/dist/css/bootstrap.css'
+import Login from './components/Login.jsx';
+import Rotas from './routes/Routes.jsx';
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        // O usuário está autenticado
+        setUser(authUser);
+      } else {
+        // O usuário não está autenticado
+        setUser(null);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        {/* Se o usuário estiver autenticado, mostre o conteúdo do aplicativo */}
+        {user ? (
+          <div>
+            <Rotas />
+          </div>
+        ) : (
+          // Se o usuário não estiver autenticado, mostre o componente de login
+          <Login />
+        )}
       </header>
     </div>
   );
